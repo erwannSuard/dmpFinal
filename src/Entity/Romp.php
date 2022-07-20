@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RompRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -42,6 +44,14 @@ class Romp
     #[ORM\ManyToOne(inversedBy: 'romps')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
+
+    #[ORM\OneToMany(mappedBy: 'romp', targetEntity: ResearchOutput::class)]
+    private Collection $researchOutputs;
+
+    public function __construct()
+    {
+        $this->researchOutputs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -140,6 +150,36 @@ class Romp
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ResearchOutput>
+     */
+    public function getResearchOutputs(): Collection
+    {
+        return $this->researchOutputs;
+    }
+
+    public function addResearchOutput(ResearchOutput $researchOutput): self
+    {
+        if (!$this->researchOutputs->contains($researchOutput)) {
+            $this->researchOutputs[] = $researchOutput;
+            $researchOutput->setRomp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResearchOutput(ResearchOutput $researchOutput): self
+    {
+        if ($this->researchOutputs->removeElement($researchOutput)) {
+            // set the owning side to null (unless already changed)
+            if ($researchOutput->getRomp() === $this) {
+                $researchOutput->setRomp(null);
+            }
+        }
 
         return $this;
     }

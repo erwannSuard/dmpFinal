@@ -25,6 +25,9 @@ class Cost
     #[ORM\ManyToOne(inversedBy: 'hasFunded')]
     private ?Contact $fundedBy = null;
 
+    #[ORM\ManyToOne(inversedBy: 'cost')]
+    private ?ResearchOutput $researchOutput = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Cost
     public function setFundedBy(?Contact $fundedBy): self
     {
         $this->fundedBy = $fundedBy;
+
+        return $this;
+    }
+
+    public function getResearchOutput(): ?ResearchOutput
+    {
+        return $this->researchOutput;
+    }
+
+    public function setResearchOutput(?ResearchOutput $researchOutput): self
+    {
+        $this->researchOutput = $researchOutput;
 
         return $this;
     }

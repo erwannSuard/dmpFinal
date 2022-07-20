@@ -49,12 +49,16 @@ class Contact
     #[ORM\OneToMany(mappedBy: 'contact', targetEntity: Romp::class)]
     private Collection $romps;
 
+    #[ORM\ManyToMany(targetEntity: ResearchOutput::class, mappedBy: 'contact')]
+    private Collection $researchOutputs;
+
     public function __construct()
     {
         $this->hasFunded = new ArrayCollection();
         $this->fundings = new ArrayCollection();
         $this->projects = new ArrayCollection();
         $this->romps = new ArrayCollection();
+        $this->researchOutputs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -258,6 +262,33 @@ class Contact
             if ($romp->getContact() === $this) {
                 $romp->setContact(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ResearchOutput>
+     */
+    public function getResearchOutputs(): Collection
+    {
+        return $this->researchOutputs;
+    }
+
+    public function addResearchOutput(ResearchOutput $researchOutput): self
+    {
+        if (!$this->researchOutputs->contains($researchOutput)) {
+            $this->researchOutputs[] = $researchOutput;
+            $researchOutput->addContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResearchOutput(ResearchOutput $researchOutput): self
+    {
+        if ($this->researchOutputs->removeElement($researchOutput)) {
+            $researchOutput->removeContact($this);
         }
 
         return $this;
