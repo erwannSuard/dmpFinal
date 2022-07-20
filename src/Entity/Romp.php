@@ -32,7 +32,7 @@ class Romp
     #[ORM\Column(type: Types::TEXT)]
     private ?string $deliverable = null;
 
-    #[ORM\Column(type: Types::TEXT, columnDefinition:"TEXT CHECK (licence_romp IN ('CC-BY-4.0', 'CC-BY-NC-4.0', 'CC-BY--ND-4.0', 'CC-BY--SA-4.0', 'CC0-1.0'))",
+    #[ORM\Column(type: Types::TEXT, columnDefinition:"TEXT CHECK (licence IN ('CC-BY-4.0', 'CC-BY-NC-4.0', 'CC-BY--ND-4.0', 'CC-BY--SA-4.0', 'CC0-1.0'))",
     options: [
         "default" => "CC-BY-4.0"
             ])]
